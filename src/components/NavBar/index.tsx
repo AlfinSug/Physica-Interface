@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import { Trans } from '@lingui/macro'
+import { useWeb3React } from '@web3-react/core'
 import Web3Status from 'components/Web3Status'
 import { useIsNftPage } from 'hooks/useIsNftPage'
 import { Box } from 'nft/components/Box'
@@ -55,8 +57,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({ href, dataTestId, id, isActi
   //     }
 
   return (
-    <a
-      href={href}
+    <a href={href}
       target={isTarget == true ? '_blank' : ''}
       className={isActive ? styles.activeMenuItem : styles.menuItem}
       id={id}
@@ -66,6 +67,37 @@ export const MenuItem: React.FC<MenuItemProps> = ({ href, dataTestId, id, isActi
     >
       {children}
     </a>
+  )
+}
+
+export const PageTabs = () => {
+  const { pathname } = useLocation()
+  const { chainId: connectedChainId } = useWeb3React()
+  const chainName = chainIdToBackendName(connectedChainId)
+
+  const isPoolActive = useIsPoolsPage()
+  const isNftPage = useIsNftPage()
+
+  const shouldDisableNFTRoutes = useAtomValue(shouldDisableNFTRoutesAtom)
+
+  return (
+    <>
+      <MenuItem href="https://3000-alfset-physicainterfae-z1ncymx2xii.ws-us106.gitpod.io/#/swap" isTarget={false}>
+        <Trans>Swap</Trans>
+      </MenuItem>
+      <MenuItem href="https://github.com/alfset/Portal-Bridge" isTarget={true}>
+        <Trans>Stake</Trans>
+      </MenuItem>
+      <MenuItem href="https://github.com/alfset/Portal-Bridge" isTarget={true}>
+        <Trans>Bridge</Trans>
+      </MenuItem>
+      <MenuItem href="https://5173-deltaswapio-deltaswap-vl9t8cfk52f.ws-us106.gitpod.io/" isTarget={false}>
+        <Trans>Pools</Trans>
+      </MenuItem>
+      <Box marginY={{ sm: '4', md: 'unset' }}>
+        <MenuDropdown />
+      </Box>
+    </>
   )
 }
 
